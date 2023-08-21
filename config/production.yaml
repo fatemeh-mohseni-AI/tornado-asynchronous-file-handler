@@ -2,6 +2,7 @@ CONFIG:
   SAVE_IMAGE_DIR: "/home/fatemeh/Desktop/test/"
   SAVE_VIDEO_DIR: "/home/fatemeh/Desktop/test/"
 
-  SERVER_IP_ADDRESS: "0.0.0.0"
+  SERVER_IP_ADDRESS_INTERNAL: "localhost"
+  SERVER_IP_ADDRESS: "185.8.174.133"
   SERVER_PORT: 8888
 
