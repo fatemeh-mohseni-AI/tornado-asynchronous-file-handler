@@ -10,6 +10,7 @@ See file_uploader.py in this directory for code that uploads files in this forma
 
 import asyncio
 import logging
+import os.path
 from urllib.parse import unquote
 
 import tornado
@@ -18,15 +19,7 @@ from tornado import options
 import io
 import PIL.Image as Image
 
-
-def save_image():
-    image = Image.open(io.BytesIO(body))
-    image.save("/home/fatemeh/Desktop/test/dfhgsdhsd.jpg")
-
-
-def save_video():
-    with open("/home/fatemeh/Desktop/test/video123.mp4", "wb") as out_file:  # open for [w]riting as [b]inary
-        out_file.write(body)
+save_path = "/home/fatemeh/Desktop/test/"
 
 
 class POSTHandler(tornado.web.RequestHandler):
@@ -38,8 +31,27 @@ class POSTHandler(tornado.web.RequestHandler):
                 logging.info(
                     'POST "%s" "%s" %d bytes', filename, content_type, len(body)
                 )
-
+                self.save(body, content_type, filename)
         self.write("OK")
+
+    def save(self, body, content_type, filename):
+        ls = [True for types in ["video", "mp4", "MP4"] if types in content_type]
+        if True in ls:
+            self.save_video(body, filename)
+
+        ls_ = [True for types in ["image", "png", "jpeg", "jpg", "PNG", "JPG", "JPEG"] if types in content_type]
+        if True in ls_:
+            self.save_image(body, filename)
+
+    def save_image(self, body, filename):
+        image = Image.open(io.BytesIO(body))
+        path = os.path.join(save_path, filename)
+        image.save(path)
+
+    def save_video(self, body, filename):
+        path = os.path.join(save_path, filename)
+        with open(path, "wb") as out_file:  # open for [w]riting as [b]inary
+            out_file.write(body)
 
 
 @tornado.web.stream_request_body

@@ -61,7 +61,7 @@ async def post(filenames):
     headers = {"Content-Type": "multipart/form-data; boundary=%s" % boundary}
     producer = partial(multipart_producer, boundary, filenames)
     response = await client.fetch(
-        "http://localhost:8888/post",
+        "http://localhost:8760/post",
         method="POST",
         headers=headers,
         body_producer=producer,
@@ -92,7 +92,7 @@ async def put(filenames):
         producer = partial(raw_producer, filename)
         url_path = quote(os.path.basename(filename))
         response = await client.fetch(
-            "http://localhost:8888/%s" % url_path,
+            "http://localhost:8760/%s" % url_path,
             method="PUT",
             headers=headers,
             body_producer=producer,
