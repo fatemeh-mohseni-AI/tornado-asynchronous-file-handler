@@ -17,6 +17,7 @@ import tornado
 from tornado import options
 
 import io
+import os
 import PIL.Image as Image
 
 save_path = "/home/fatemeh/Desktop/test/"

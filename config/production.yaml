@@ -1,0 +1,7 @@
+CONFIG:
+  SAVE_IMAGE_DIR: "/home/fatemeh/Desktop/test/"
+  SAVE_VIDEO_DIR: "/home/fatemeh/Desktop/test/"
+
+  SERVER_IP_ADDRESS: "0.0.0.0"
+  SERVER_PORT: 8888
+
