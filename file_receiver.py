@@ -18,9 +18,8 @@ from tornado import options
 
 import io
 import os
+import yaml
 import PIL.Image as Image
-
-save_path = "/home/fatemeh/Desktop/test/"
 
 
 class POSTHandler(tornado.web.RequestHandler):
@@ -46,11 +45,11 @@ class POSTHandler(tornado.web.RequestHandler):
 
     def save_image(self, body, filename):
         image = Image.open(io.BytesIO(body))
-        path = os.path.join(save_path, filename)
+        path = os.path.join(conf["SAVE_IMAGE_DIR"], filename)
         image.save(path)
 
     def save_video(self, body, filename):
-        path = os.path.join(save_path, filename)
+        path = os.path.join(conf["SAVE_VIDEO_DIR"], filename)
         with open(path, "wb") as out_file:  # open for [w]riting as [b]inary
             out_file.write(body)
 
@@ -70,6 +69,23 @@ class PUTHandler(tornado.web.RequestHandler):
         self.write("OK")
 
 
+def config_loader():
+    """
+    loads every file inside config folder
+    """
+    config_ = {}
+
+    logger_config_path = os.path.abspath(
+        os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config', 'production.yaml')
+    )
+
+    with open(logger_config_path) as f:
+        config = yaml.safe_load(f)
+        value = config["CONFIG"]
+
+    return value
+
+
 def make_app():
     return tornado.web.Application([(r"/post", POSTHandler), (r"/(.*)", PUTHandler)])
 
@@ -77,10 +93,13 @@ def make_app():
 async def main():
     options.parse_command_line()
     app = make_app()
-    app.listen(8760, reuse_port=True)
+    app.listen(conf["SERVER_PORT"], reuse_port=True)
     await asyncio.Event().wait()
 
 
 if __name__ == "__main__":
+    # load config
+    conf = config_loader()
+
     asyncio.run(main())
 
