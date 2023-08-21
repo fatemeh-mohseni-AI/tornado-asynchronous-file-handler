@@ -45,11 +45,11 @@ class POSTHandler(tornado.web.RequestHandler):
 
     def save_image(self, body, filename):
         image = Image.open(io.BytesIO(body))
-        path = os.path.join(conf["SAVE_IMAGE_DIR"], filename)
+        path = os.path.join(conf["SAVE_IMAGE_DIR"], filename.split("/")[-1])
         image.save(path)
 
     def save_video(self, body, filename):
-        path = os.path.join(conf["SAVE_VIDEO_DIR"], filename)
+        path = os.path.join(conf["SAVE_VIDEO_DIR"], filename.split("/")[-1])
         with open(path, "wb") as out_file:  # open for [w]riting as [b]inary
             out_file.write(body)
 
